@@ -7,25 +7,24 @@ public class TimeView : MonoBehaviour
     [SerializeField] private TextMeshPro _text;
     [SerializeField] private Timer _timer;
 
-    private int numberStopped = 1;
-    private Coroutine coroutine = null;
-    private bool CoroutineHasStarted = false;
+    private string _textNumber;
+    private int _numberStopped = 1;
+    private Coroutine _coroutine;
+    private bool _ñoroutineHasStarted = false;
 
     private void Start()
     {
-        _text.text = "0";      
+        _textNumber = "0";
+        _text.text = _textNumber;
     }
-
     private void OnEnable()
     {
         _timer.OnClick += ChangeTimer;
     }
-
     private void OnDisable()
     {
         _timer.OnClick -= ChangeTimer;
     }                                                          
-
     private IEnumerator Countdown(int start, float delay = 0.5f)
     {
         var wait = new WaitForSeconds(delay);
@@ -36,25 +35,23 @@ public class TimeView : MonoBehaviour
             yield return wait;
         }
     }
-
     private void DisplayCountdown(int count)
     {
-        _text.text = count.ToString("");
+        _textNumber = count.ToString("");
+        _text.text = _textNumber;
     }
-
     private void ChangeTimer()
     {
-        if (CoroutineHasStarted)
+        if (_ñoroutineHasStarted && _coroutine != null)
         {
-
-            StopCoroutine(coroutine);
-            numberStopped = int.Parse(_text.text.ToString());
-            CoroutineHasStarted = false;
+            StopCoroutine(_coroutine);
+            _numberStopped = int.Parse(_textNumber.ToString());
+            _ñoroutineHasStarted = false;
         }
         else
         {
-            coroutine = StartCoroutine(Countdown(numberStopped));
-            CoroutineHasStarted = true;
+            _coroutine = StartCoroutine(Countdown(_numberStopped));
+            _ñoroutineHasStarted = true;
         }
     }
 }
